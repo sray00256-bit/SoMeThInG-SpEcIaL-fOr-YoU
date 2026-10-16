@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A special question for you...</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffd1dc, #ffccd5, #ffe5ec);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .heart-bg {
+      position: absolute;
+      color: rgba(255, 77, 109, 0.35);
+      animation: floatUp linear infinite;
+      user-select: none;
+      z-index: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(105vh) scale(0.6);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.1);
+        opacity: 0;
+      }
+    }
+
+    .card-container {
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(255, 77, 109, 0.2);
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      border: 2px solid #fff0f3;
+      transition: all 0.3s ease;
+    }
+
+    .gif-display {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 1.2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffe3e8;
+      font-size: 4rem;
+      box-shadow: 0 8px 16px rgba(255, 107, 129, 0.2);
+      animation: bounce 2s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      color: #c9184a;
+      margin-bottom: 0.8rem;
+    }
+
+    p {
+      color: #595959;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 1.8rem;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.2rem;
+      min-height: 55px;
+      position: relative;
+    }
+
+    button {
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+      padding: 0.8rem 2rem;
+      box-shadow: 0 8px 20px rgba(255, 77, 109, 0.35);
+    }
+
+    #yesBtn:hover {
+      background: #c9184a;
+      transform: scale(1.08);
+    }
+
+    #noBtn {
+      background: #f1f3f5;
+      color: #6c757d;
+      padding: 0.8rem 1.8rem;
+      position: relative;
+      transition: top 0.2s ease, left 0.2s ease;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles generated via JS -->
+
+  <div class="card-container" id="proposalCard">
+    <div class="gif-display" id="visualIcon">💌</div>
+    <h1 id="headline">Hey bestie...</h1>
+    <p id="subtext">
+      From late-night talks to endless memories, you've made my world so much brighter. Will you take a step further with me and be mine?
+    </p>
+
+    <div class="btn-group" id="btnGroup">
+      <button id="yesBtn">Yes! ❤️</button>
+      <button id="noBtn">No</button>
+    </div>
+  </div>
+
+  <script>
+    // Create random floating hearts
+    function createHearts() {
+      const symbols = ['❤️', '💖', '✨', '🌸', '💕'];
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart-bg';
+        heart.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
+        heart.style.animationDelay = (Math.random() * 5) + 's';
+        heart.style.fontSize = (Math.random() * 1.2 + 0.8) + 'rem';
+        document.body.appendChild(heart);
+      }
+    }
+    createHearts();
+
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const headline = document.getElementById('headline');
+    const subtext = document.getElementById('subtext');
+    const visualIcon = document.getElementById('visualIcon');
+    const btnGroup = document.getElementById('btnGroup');
+
+    // Runaway "No" button logic
+    function dodge() {
+      const card = document.getElementById('proposalCard');
+      const cardRect = card.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxX = cardRect.width - btnRect.width - 40;
+      const maxY = cardRect.height - btnRect.height - 40;
+
+      const randomX = Math.floor(Math.random() * maxX) - (maxX / 2);
+      const randomY = Math.floor(Math.random() * maxY) - (maxY / 2);
+
+      noBtn.style.position = 'absolute';
+      noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    }
+
+    noBtn.addEventListener('mouseenter', dodge);
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      dodge();
+    });
+
+    // "Yes" action
+    yesBtn.addEventListener('click', () => {
+      visualIcon.innerText = '🥰';
+      headline.innerText = 'Best decision ever! 🎉';
+      subtext.innerHTML = "You just made me the happiest person in the room.<br>Can't wait for our next chapter together! ❤️";
+      btnGroup.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>
